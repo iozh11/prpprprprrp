@@ -63,6 +63,7 @@ def all_ready_tasks(message):
 @bot.message_handler(commands=['add_task'])
 def add_task(message):
     bot.send_message(message.chat.id, add_taskk)
+    name = bot.register_next_step_handler(message, )
 
 
 
