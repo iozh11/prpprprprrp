@@ -7,7 +7,6 @@ class Datebase:
         self.cur = self.con.cursor()  # создание курсора для запросов к БД
 
         sql = """CREATE TABLE IF NOT EXISTS tasks(
-                id INT PRIMARY KEY,
                 name TEXT,
                 date INT,
                 ready INT
@@ -19,10 +18,10 @@ class Datebase:
 
 
 
-    def add_task(self, id, name, date, ready):
-        sql = "INSERT INTO tasks VALUES(?,?,?,?)"
+    def add_task(self, name, date, ready):
+        sql = "INSERT INTO tasks VALUES(?,?,?)"
 
-        self.cur.execute(sql, (id, name, date, ready))  # запрос
+        self.cur.execute(sql, (name, date, ready))  # запрос
 
         self.con.commit()  # сохранение изменений
 
@@ -53,8 +52,17 @@ class Datebase:
         data = self.cur.fetchall()  # записываю все найденные записи
 
         return data
+    
+    def select_task(self, name):
+        sql = "SELECT * FROM tasks WHERE name=?"
+
+        self.cur.execute(sql, (name,))
+        data = self.cur.fetchone()
+
+        return data
 
 # datebase = Datebase()
-# datebase.add_task(2, 'Хорошо поспать', 1111, 1)
+# datebase()
+# datebase.add_task('Покушать', 1111, 0)
 # datebase.select_all_task()
 

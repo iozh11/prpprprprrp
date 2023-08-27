@@ -63,8 +63,22 @@ def all_ready_tasks(message):
 @bot.message_handler(commands=['add_task'])
 def add_task(message):
     bot.send_message(message.chat.id, add_taskk)
-    name = bot.register_next_step_handler(message, )
 
+    name = bot.register_next_step_handler(message, name_task)
+
+
+
+def name_task(message):
+    name = message.text
+
+    if datebase.select_task(name) is None:
+        pass
+    else:
+        bot.send_message(message.chat.id, "Такая задача уже существует")
+        return
+    
+    bot.send_message(message.chat.id, f"Задача:{name}?", reply_markup=markup.keyboard_add_task)
+    datebase.add_task(name, 28, ready=0)
 
 
 bot.polling()
