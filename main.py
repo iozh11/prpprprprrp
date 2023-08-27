@@ -27,7 +27,6 @@ def start(message):
 @bot.message_handler(commands=['all_tasks'])
 def all_task(message):
     number_of_tasks = datebase.select_all_task()
-    # print(number_of_tasks)
     for task in number_of_tasks:
             text = f"номер: {task[0]}, задача: {task[1]}, дата: {task[2]}"
             bot.send_message(message.chat.id, text)
@@ -66,8 +65,6 @@ def add_task(message):
 
     name = bot.register_next_step_handler(message, name_task)
 
-
-
 def name_task(message):
     name = message.text
 
@@ -78,7 +75,8 @@ def name_task(message):
         return
     
     bot.send_message(message.chat.id, f"Задача:{name}?", reply_markup=markup.keyboard_add_task)
-    datebase.add_task(name, 28, ready=0)
+    # datebase.add_task(name, 28, ready=0)
+
 
 
 bot.polling()
