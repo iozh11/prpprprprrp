@@ -60,9 +60,3 @@ class Datebase:
         data = self.cur.fetchone()
 
         return data
-
-# datebase = Datebase()
-# datebase()
-# datebase.add_task('Покушать', 1111, 0)
-# datebase.select_all_task()
-

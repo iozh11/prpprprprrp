@@ -2,8 +2,8 @@ from telebot import types
 
 adm_btn_1= types.InlineKeyboardButton(text="edit", callback_data= "edit")
 
-add_task_btn1 = types.InlineKeyboardButton(text="Да. Сохранить и добавить", callback_data= "savee")
-add_task_btn2 = types.InlineKeyboardButton(text="Нет. Редактировать", callback_data= "peredelat")
+add_task_btn = types.InlineKeyboardButton(text="Да. Сохранить и добавить", callback_data= "save_task")
+edit_task_btn = types.InlineKeyboardButton(text="Нет. Редактировать", callback_data= "edit_task")
 
 
 
@@ -14,6 +14,6 @@ keyboard_admin.add(
 
 keyboard_add_task = types.InlineKeyboardMarkup()
 keyboard_add_task.add(
-    add_task_btn1,
-    add_task_btn2
+    add_task_btn,
+    edit_task_btn
 )

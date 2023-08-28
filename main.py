@@ -6,9 +6,9 @@ from dotenv import load_dotenv
 
 from texts import startt, add_taskk
 
-import db1
+import workwithDatabase
 
-datebase = db1.Datebase()
+datebase = workwithDatabase.Datebase()
 
 load_dotenv()
 api_token = os.getenv('TELEGRAM_API_TOKEN')
@@ -36,9 +36,7 @@ def all_task(message):
 @bot.message_handler(commands=['all_notready_tasks'])
 def all_notready_tasks(message):
     number_of_tasks = datebase.select_notready_task()
-    if number_of_tasks:
-        pass
-    else:
+    if not number_of_tasks:
         bot.send_message(message.chat.id, 'Вы выполнили все задачи')
     for task in number_of_tasks:
             text = f"номер: {task[0]}, задача: {task[1]}, дата: {task[2]}"
@@ -49,9 +47,7 @@ def all_notready_tasks(message):
 @bot.message_handler(commands=['all_ready_tasks'])
 def all_ready_tasks(message):
     number_of_tasks = datebase.select_ready_task()
-    if number_of_tasks:
-        pass
-    else:
+    if not number_of_tasks:
         bot.send_message(message.chat.id, "Нет выполненных задач")
     for task in number_of_tasks:
             text = f"номер: {task[0]}, задача: {task[1]}, дата: {task[2]}"
@@ -65,18 +61,29 @@ def add_task(message):
 
     name = bot.register_next_step_handler(message, name_task)
 
+
+
 def name_task(message):
+    global name
+
     name = message.text
 
     if datebase.select_task(name) is None:
-        pass
+        bot.send_message(message.chat.id, f"Задача: \"{name}\"?", reply_markup=markup.keyboard_add_task)
+        
     else:
         bot.send_message(message.chat.id, "Такая задача уже существует")
-        return
-    
-    bot.send_message(message.chat.id, f"Задача:{name}?", reply_markup=markup.keyboard_add_task)
-    # datebase.add_task(name, 28, ready=0)
 
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_handler(call):
+    if call.data == "save_task":
+        datebase.add_task(name, 28, ready=0)
+        bot.send_message(call.message.chat.id, "Задача была добавлена")
+#     if call.data == "edit_task":
+#         bot.send_message(call.from_user.id, 'Введите задачу') 
+#         name = bot.register_next_step_handler(call, name_task)
 
 
 bot.polling()
