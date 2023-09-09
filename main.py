@@ -40,7 +40,7 @@ def all_notready_tasks(message):
         bot.send_message(message.chat.id, 'Вы выполнили все задачи')
     for task in number_of_tasks:
             text = f"номер: {task[0]}, задача: {task[1]}, дата: {task[2]}"
-            bot.send_message(message.chat.id, text, reply_markup=markup.keyboard_admin)
+            bot.send_message(message.chat.id, text, reply_markup=markup.keyboard_for_notready_task)
 
 
 
@@ -51,7 +51,7 @@ def all_ready_tasks(message):
         bot.send_message(message.chat.id, "Нет выполненных задач")
     for task in number_of_tasks:
             text = f"номер: {task[0]}, задача: {task[1]}, дата: {task[2]}"
-            bot.send_message(message.chat.id, text, reply_markup=markup.keyboard_admin)
+            bot.send_message(message.chat.id, text, reply_markup=markup.keyboard_for_ready_task)
 
 
 
@@ -78,12 +78,17 @@ def name_task(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_handler(call):
+    global name
     if call.data == "save_task":
         datebase.add_task(name, 28, ready=0)
         bot.send_message(call.message.chat.id, "Задача была добавлена")
-#     if call.data == "edit_task":
-#         bot.send_message(call.from_user.id, 'Введите задачу') 
-#         name = bot.register_next_step_handler(call, name_task)
+    if call.data == "edit_task":
+        bot.send_message(call.message.chat.id, 'Введите задачу заново') 
+        name = bot.register_next_step_handler(call.message, name_task)
 
 
+
+
+
+    
 bot.polling()

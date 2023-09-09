@@ -45,6 +45,8 @@ class Datebase:
 
         return data
     
+
+
     def select_notready_task(self):
         sql = "SELECT * FROM tasks WHERE ready = 0"
 
@@ -53,6 +55,8 @@ class Datebase:
 
         return data
     
+
+
     def select_task(self, name):
         sql = "SELECT * FROM tasks WHERE name=?"
 
@@ -60,3 +64,12 @@ class Datebase:
         data = self.cur.fetchone()
 
         return data
+    
+
+
+    def did_the_task(self, name, ready):
+        sql = "UPDATE tasks SET ready=? WHERE name=?"
+
+        self.cur.execute(sql, (ready, name))  # запрос
+
+        self.con.commit()  # сохранение изменений
